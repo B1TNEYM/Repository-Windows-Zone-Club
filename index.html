@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Официальный репозиторий Windows Zone Club - ресурсы и информация">
+    <title>Repository Windows Zone Club</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #444;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: #fff;
+            --border-color: #ddd;
+            --success-color: #28a745;
+            --app-card-bg: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin: 20px 0 15px;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin: 25px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .content-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        .news-item {
+            margin-bottom: 25px;
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .app-card {
+            background-color: var(--app-card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+            border: 1px solid var(--border-color);
+        }
+        
+        .app-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .app-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .app-version {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .download-btn:hover {
+            background-color: #004c99;
+        }
+        
+        .news-date {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .news-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .news-content {
+            margin-bottom: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        a:hover {
+            color: #004499;
+            text-decoration: underline;
+        }
+        
+        /* Кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        
+        .back-to-top:hover {
+            background-color: #004c99;
+            transform: translateY(-3px);
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #4a9eff;
+                --secondary-color: #eee;
+                --background-color: #121212;
+                --text-color: #e0e0e0;
+                --card-bg: #1e1e1e;
+                --border-color: #333;
+                --app-card-bg: #2a2a2a;
+            }
+            
+            body {
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+            
+            .news-date {
+                color: #aaa;
+            }
+            
+            .app-version {
+                color: #aaa;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .content-card {
+                padding: 15px;
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            h3 {
+                font-size: 1.1rem;
+            }
+            
+            .content-card {
+                padding: 12px;
+                border-radius: 6px;
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Repository Windows Zone Club</h1>
+        </header>
+        
+        <main>
+            <div class="content-card">
+                <h2>Последние новости</h2>
+                
+                <div class="news-item">
+                    <span class="news-date">30 июня 2025</span>
+                    <span class="tag">АНОНС</span>
+                    <div class="news-title">Анонс запуска репозитория!</div>
+                    <div class="news-content">
+                        <p>Мы рады объявить о скором запуске официального репозитория Windows Zone Club!</p>
+                        <p>Торжественное открытие запланировано на <strong>1 июля в 12:00 (по киевскому времени)</strong>.</p>
+                        <p>Этот репозиторий станет центральным хранилищем всех наших уникальных утилит, оптимизаций и эксклюзивных инструментов для Windows, разработанных нашим сообществом.</p>
+                        <p>Оставайтесь с нами - завтра официальный запуск!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2>Доступные приложения</h2>
+                
+                <h3>Браузеры</h3>
+                <div class="apps-grid">
+                    <div class="app-card">
+                        <div class="app-icon">🌐</div>
+                        <div class="app-name">Firefox</div>
+                        <div class="app-version">v125.0</div>
+                        <a href="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🌐</div>
+                        <div class="app-name">Vivaldi</div>
+                        <div class="app-version">v6.7</div>
+                        <a href="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🌐</div>
+                        <div class="app-name">Brave</div>
+                        <div class="app-version">v1.68</div>
+                        <a href="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🌐</div>
+                        <div class="app-name">Google Chrome</div>
+                        <div class="app-version">v126.0</div>
+                        <a href="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                </div>
+                
+                <h3>Мессенджеры</h3>
+                <div class="apps-grid">
+                    <div class="app-card">
+                        <div class="app-icon">✉️</div>
+                        <div class="app-name">Telegram</div>
+                        <div class="app-version">v4.9</div>
+                        <a href="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">💬</div>
+                        <div class="app-name">Discord</div>
+                        <div class="app-version">v1.0.9036</div>
+                        <a href="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">📱</div>
+                        <div class="app-name">Viber</div>
+                        <div class="app-version">v21.3</div>
+                        <a href="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                </div>
+                
+                <h3>Мультимедиа</h3>
+                <div class="apps-grid">
+                    <div class="app-card">
+                        <div class="app-icon">🎬</div>
+                        <div class="app-name">VLC</div>
+                        <div class="app-version">v3.0.20</div>
+                        <a href="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🎵</div>
+                        <div class="app-name">AIMP</div>
+                        <div class="app-version">v5.11</div>
+                        <a href="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                </div>
+                
+                <h3>Утилиты</h3>
+                <div class="apps-grid">
+                    <div class="app-card">
+                        <div class="app-icon">📖</div>
+                        <div class="app-name">STDU Viewer</div>
+                        <div class="app-version">v1.6.375</div>
+                        <a href="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">📥</div>
+                        <div class="app-name">qBittorrent</div>
+                        <div class="app-version">v4.6.3</div>
+                        <a href="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🔒</div>
+                        <div class="app-name">Windscribe</div>
+                        <div class="app-version">v2.6.14</div>
+                        <a href="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                    
+                    <div class="app-card">
+                        <div class="app-icon">🎮</div>
+                        <div class="app-name">Steam</div>
+                        <div class="app-version">v2.10</div>
+                        <a href="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4" class="download-btn" target="_blank">Скачать</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <footer class="footer">
+        <p>Для получения дополнительной информации посетите <a href="https://t.me/WinZoneClub_Official" target="_blank" rel="noopener noreferrer">официальный телеграм-канал</a>.</p>
+    </footer>
+
+    <!-- Кнопка "Наверх" -->
+    <button class="back-to-top" title="Наверх">↑</button>
+
+    <script>
+        // Функция для кнопки "Наверх"
+        const backToTopButton = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
