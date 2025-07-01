@@ -15,6 +15,8 @@
             --border-color: #ddd;
             --success-color: #28a745;
             --app-card-bg: #f8f9fa;
+            --search-bg: #fff;
+            --search-border: #ccc;
         }
         
         * {
@@ -50,6 +52,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         h1 {
@@ -83,6 +86,35 @@
             margin-bottom: 30px;
             overflow-x: auto;
             transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .search-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid var(--search-border);
+            border-radius: 25px;
+            outline: none;
+            background-color: var(--search-bg);
+            color: var(--text-color);
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 102, 204, 0.2);
+        }
+        
+        .search-results {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
         }
         
         .apps-grid {
@@ -132,14 +164,16 @@
             background-color: #004c99;
         }
         
-        .tag {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-right: 5px;
-            background-color: var(--success-color);
-            color: white;
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-style: italic;
+            display: none;
+        }
+        
+        .category-section {
+            display: block; /* По умолчанию показываем все категории */
         }
         
         .footer {
@@ -237,6 +271,8 @@
             --card-bg: #1e1e1e;
             --border-color: #333;
             --app-card-bg: #2a2a2a;
+            --search-bg: #2a2a2a;
+            --search-border: #444;
         }
         
         /* Кнопка переключения темы */
@@ -317,6 +353,11 @@
                 flex-direction: column;
                 gap: 5px;
             }
+            
+            .search-box {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -329,107 +370,126 @@
         
         <main>
             <div class="content-card">
-                <h2>Доступные приложения</h2>
-                
-                <h3>Браузеры</h3>
-                <div class="apps-grid">
-                    <div class="app-card">
-                        <div class="app-icon">🌐</div>
-                        <div class="app-name">Firefox</div>
-                        <a href="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">🌐</div>
-                        <div class="app-name">Vivaldi</div>
-                        <a href="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">🌐</div>
-                        <div class="app-name">Brave</div>
-                        <a href="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">🌐</div>
-                        <div class="app-name">Google Chrome</div>
-                        <a href="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww" class="download-btn" target="_blank">Скачать</a>
-                    </div>
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-box" placeholder="Поиск приложений..." autocomplete="off">
+                    <div class="search-results" id="searchResults"></div>
                 </div>
                 
-                <h3>Мессенджеры</h3>
-                <div class="apps-grid">
-                    <div class="app-card">
-                        <div class="app-icon">✉️</div>
-                        <div class="app-name">Telegram</div>
-                        <a href="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">💬</div>
-                        <div class="app-name">Discord</div>
-                        <a href="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">📱</div>
-                        <div class="app-name">Viber</div>
-                        <a href="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0" class="download-btn" target="_blank">Скачать</a>
-                    </div>
+                <div class="no-results" id="noResults">
+                    Приложений по вашему запросу не найдено
                 </div>
                 
-                <h3>Мультимедиа</h3>
-                <div class="apps-grid">
-                    <div class="app-card">
-                        <div class="app-icon">🎬</div>
-                        <div class="app-name">VLC</div>
-                        <a href="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU" class="download-btn" target="_blank">Скачать</a>
+                <div id="appsContainer">
+                    <h2>Доступные приложения</h2>
+                    
+                    <div class="category-section" id="browsersSection">
+                        <h3>Браузеры</h3>
+                        <div class="apps-grid">
+                            <div class="app-card" data-name="firefox" data-category="browsers">
+                                <div class="app-icon">🌐</div>
+                                <div class="app-name">Firefox</div>
+                                <a href="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="vivaldi" data-category="browsers">
+                                <div class="app-icon">🌐</div>
+                                <div class="app-name">Vivaldi</div>
+                                <a href="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="brave" data-category="browsers">
+                                <div class="app-icon">🌐</div>
+                                <div class="app-name">Brave</div>
+                                <a href="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="google chrome" data-category="browsers">
+                                <div class="app-icon">🌐</div>
+                                <div class="app-name">Google Chrome</div>
+                                <a href="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="app-card">
-                        <div class="app-icon">🎵</div>
-                        <div class="app-name">AIMP</div>
-                        <a href="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                </div>
-                
-                <h3>Утилиты</h3>
-                <div class="apps-grid">
-                    <div class="app-card">
-                        <div class="app-icon">📖</div>
-                        <div class="app-name">STDU Viewer</div>
-                        <a href="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">📥</div>
-                        <div class="app-name">qBittorrent</div>
-                        <a href="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I" class="download-btn" target="_blank">Скачать</a>
-                    </div>
-                    
-                    <div class="app-card">
-                        <div class="app-icon">🔒</div>
-                        <div class="app-name">Windscribe</div>
-                        <a href="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18" class="download-btn" target="_blank">Скачать</a>
+                    <div class="category-section" id="messengersSection">
+                        <h3>Мессенджеры</h3>
+                        <div class="apps-grid">
+                            <div class="app-card" data-name="telegram" data-category="messengers">
+                                <div class="app-icon">✉️</div>
+                                <div class="app-name">Telegram</div>
+                                <a href="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="discord" data-category="messengers">
+                                <div class="app-icon">💬</div>
+                                <div class="app-name">Discord</div>
+                                <a href="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="viber" data-category="messengers">
+                                <div class="app-icon">📱</div>
+                                <div class="app-name">Viber</div>
+                                <a href="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="app-card">
-                        <div class="app-icon">🎮</div>
-                        <div class="app-name">Steam</div>
-                        <a href="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4" class="download-btn" target="_blank">Скачать</a>
+                    <div class="category-section" id="multimediaSection">
+                        <h3>Мультимедиа</h3>
+                        <div class="apps-grid">
+                            <div class="app-card" data-name="vlc" data-category="multimedia">
+                                <div class="app-icon">🎬</div>
+                                <div class="app-name">VLC</div>
+                                <a href="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="aimp" data-category="multimedia">
+                                <div class="app-icon">🎵</div>
+                                <div class="app-name">AIMP</div>
+                                <a href="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
                     </div>
+                    
+                    <div class="category-section" id="utilitiesSection">
+                        <h3>Утилиты</h3>
+                        <div class="apps-grid">
+                            <div class="app-card" data-name="stdu viewer" data-category="utilities">
+                                <div class="app-icon">📖</div>
+                                <div class="app-name">STDU Viewer</div>
+                                <a href="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="qbittorrent" data-category="utilities">
+                                <div class="app-icon">📥</div>
+                                <div class="app-name">qBittorrent</div>
+                                <a href="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="windscribe" data-category="utilities">
+                                <div class="app-icon">🔒</div>
+                                <div class="app-name">Windscribe</div>
+                                <a href="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                            
+                            <div class="app-card" data-name="steam" data-category="utilities">
+                                <div class="app-icon">🎮</div>
+                                <div class="app-name">Steam</div>
+                                <a href="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4" class="download-btn" target="_blank">Скачать</a>
+                            </div>
 
-                    <div class="app-card">
-                        <div class="app-icon">🗜️</div>
-                        <div class="app-name">WinRAR</div>
-                        <a href="https://mega.nz/file/UP8mVYQC#BfeRCDM4riSQ5os8LnLWf4Y2wTXWqQg9nQXAidmfPlE" class="download-btn" target="_blank">Скачать</a>
-                    </div>
+                            <div class="app-card" data-name="winrar" data-category="utilities">
+                                <div class="app-icon">🗜️</div>
+                                <div class="app-name">WinRAR</div>
+                                <a href="https://mega.nz/file/UP8mVYQC#BfeRCDM4riSQ5os8LnLWf4Y2wTXWqQg9nQXAidmfPlE" class="download-btn" target="_blank">Скачать</a>
+                            </div>
 
-                    <div class="app-card">
-                        <div class="app-icon">🗜️</div>
-                        <div class="app-name">7-Zip</div>
-                        <a href="https://mega.nz/file/YLsjBALR#WYUMlTkLRWA3TLXza30gJemoMANYL3KPPIwtnwowplY" class="download-btn" target="_blank">Скачать</a>
+                            <div class="app-card" data-name="7-zip" data-category="utilities">
+                                <div class="app-icon">🗜️</div>
+                                <div class="app-name">7-Zip</div>
+                                <a href="https://mega.nz/file/YLsjBALR#WYUMlTkLRWA3TLXza30gJemoMANYL3KPPIwtnwowplY" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -522,6 +582,73 @@
                 }
                 updateThemeIcon();
             }
+        });
+
+        // Функция поиска приложений
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const noResults = document.getElementById('noResults');
+            const appCards = document.querySelectorAll('.app-card');
+            const categorySections = document.querySelectorAll('.category-section');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                let foundApps = 0;
+                
+                if (searchTerm.length === 0) {
+                    // Если строка поиска пуста, показываем все приложения и категории
+                    appCards.forEach(card => {
+                        card.style.display = '';
+                        card.parentElement.style.display = '';
+                    });
+                    
+                    categorySections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                    
+                    searchResults.textContent = '';
+                    noResults.style.display = 'none';
+                    return;
+                }
+                
+                // Сначала скрываем все карточки и категории
+                appCards.forEach(card => {
+                    card.style.display = 'none';
+                });
+                
+                categorySections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Ищем совпадения
+                appCards.forEach(card => {
+                    const appName = card.getAttribute('data-name').toLowerCase();
+                    const displayName = card.querySelector('.app-name').textContent.toLowerCase();
+                    
+                    if (appName.includes(searchTerm) || displayName.includes(searchTerm)) {
+                        card.style.display = '';
+                        card.parentElement.style.display = '';
+                        foundApps++;
+                        
+                        // Показываем родительскую категорию
+                        const categoryId = card.getAttribute('data-category') + 'Section';
+                        document.getElementById(categoryId).style.display = 'block';
+                    }
+                });
+                
+                // Показываем результаты поиска
+                if (foundApps > 0) {
+                    searchResults.textContent = `Найдено приложений: ${foundApps}`;
+                    noResults.style.display = 'none';
+                } else {
+                    searchResults.textContent = '';
+                    noResults.style.display = 'block';
+                }
+            });
+            
+            // Фокус на поле поиска при загрузке страницы
+            searchInput.focus();
         });
     </script>
 </body>
