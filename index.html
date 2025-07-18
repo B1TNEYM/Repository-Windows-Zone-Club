@@ -206,6 +206,12 @@
             color: var(--primary-color);
             font-size: 1rem;
         }
+        .news-author-role {
+            font-weight: normal;
+            color: var(--secondary-color);
+            font-size: 0.97em;
+            margin-left: 8px;
+        }
         .news-author-date {
             font-size: 0.92rem;
             color: var(--secondary-color);
@@ -366,10 +372,11 @@
         <div id="newsList">
             <article style="margin-bottom: 18px;">
                 <div class="news-author-block">
-                    <!-- Аватарка из корня репозитория -->
                     <img src="avatar.png" alt="B1TNEYM" class="news-author-avatar">
                     <div class="news-author-details">
-                        <span class="news-author-nick">B1TNEYM</span>
+                        <span class="news-author-nick">
+                            B1TNEYM <span class="news-author-role">— Должность: Основатель</span>
+                        </span>
                         <span class="news-author-date">18 июля 2025, 05:48</span>
                     </div>
                 </div>
