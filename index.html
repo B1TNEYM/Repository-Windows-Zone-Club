@@ -30,6 +30,36 @@
             flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
         }
+        .blocked-message {
+            max-width: 500px;
+            margin: 100px auto 0 auto;
+            background: #fff;
+            border: 2px solid #c00;
+            border-radius: 10px;
+            padding: 40px 30px;
+            color: #c00;
+            font-size: 1.35rem;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+        .blocked-message h1 {
+            color: #c00;
+            font-size: 2rem;
+            margin-bottom: 18px;
+        }
+        .blocked-message p {
+            color: #444;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 600px) {
+            .blocked-message {
+                padding: 20px 10px;
+                font-size: 1rem;
+            }
+            .blocked-message h1 {
+                font-size: 1.3rem;
+            }
+        }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; }
         header {
             padding: 20px 0;
@@ -182,7 +212,6 @@
             transition: transform 0.3s, color 0.3s;
         }
         .theme-toggle:hover { transform: scale(1.1); }
-        /* Дополнительные стили для блока новости с автором */
         .news-author-block {
             display: flex;
             align-items: center;
@@ -241,12 +270,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Блок для сообщения о блокировке -->
+    <div id="blockRU" style="display:none;">
+        <div class="blocked-message">
+            <h1>Уважаемый абонент!</h1>
+            <p>Доступ к данному ресурсу заблокирован на территории Российской Федерации.</p>
+        </div>
+    </div>
+    <div class="container" id="mainContent">
         <header>
             <h1>Repository Windows Zone Club</h1>
             <button class="theme-toggle" aria-label="Переключить тему">🌓</button>
         </header>
-        
         <main>
             <div class="content-card">
                 <div style="margin-bottom:20px;">
@@ -364,7 +399,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Новый раздел для оригинальных Windows -->
                     <div class="category-section" id="windowsSection">
                         <h3>Оригинальные образы Windows (Torrent)</h3>
                         <div class="apps-grid">
@@ -427,6 +461,15 @@
     </footer>
     <button class="back-to-top" title="Наверх">↑</button>
     <script>
+        // Гео-блокировка через ipapi.co
+        fetch('https://ipapi.co/country/')
+          .then(res => res.text())
+          .then(country => {
+            if (country.trim() === 'RU') {
+              document.body.innerHTML = document.getElementById('blockRU').innerHTML;
+            }
+          });
+
         // Кнопка "Наверх"
         const backToTopButton = document.querySelector('.back-to-top');
         window.addEventListener('scroll', () => {
@@ -439,6 +482,7 @@
         backToTopButton.addEventListener('click', () => {
             window.scrollTo({top: 0, behavior: 'smooth'});
         });
+
         // Переключение темы
         const themeToggle = document.querySelector('.theme-toggle');
         const body = document.body;
@@ -475,6 +519,7 @@
                 updateThemeIcon();
             }
         });
+
         // Поиск и выбор категории
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
