@@ -146,22 +146,7 @@
             align-items: center;
             gap: 15px;
         }
-        .github-support {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .github-logo { width: 24px; height: 24px; }
-        .github-link {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--secondary-color);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .github-link:hover { text-decoration: underline; }
+        /* Удалено .github-support, .github-logo, .github-link стили */
         a {
             color: var(--primary-color);
             text-decoration: none;
@@ -262,7 +247,7 @@
             h3 { font-size: 1.1rem; }
             .content-card { padding: 12px; border-radius: 6px; }
             .apps-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-            .github-support { flex-direction: column; gap: 5px; }
+            /* Удалено .github-support, .github-logo, .github-link стили */
             .search-box { padding: 10px 15px; font-size: 0.9rem; }
             .news-author-block { gap: 6px; }
             .news-author-avatar { width: 23px; height: 23px; }
@@ -443,13 +428,7 @@
     <footer class="footer">
         <div class="footer-content">
             <p>Для получения дополнительной информации посетите <a href="https://t.me/WinZoneClub_Official" target="_blank" rel="noopener noreferrer">официальный телеграм-канал</a>.</p>
-            <div class="github-support">
-                <span>При поддержке</span>
-                <a href="https://github.com" class="github-link" target="_blank" rel="noopener noreferrer">
-                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-logo">
-                    <span>GitHub</span>
-                </a>
-            </div>
+            <p>© Nexus Software 2025</p>
         </div>
     </footer>
     <button class="back-to-top" title="Наверх">↑</button>
