@@ -30,37 +30,38 @@
             flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
         }
-        .blocked-message {
-            max-width: 500px;
-            margin: 100px auto 0 auto;
-            background: #fff;
-            border: 2px solid #c00;
-            border-radius: 10px;
-            padding: 40px 30px;
-            color: #c00;
-            font-size: 1.35rem;
-            text-align: center;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        .container { 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column;
         }
-        .blocked-message h1 {
-            color: #c00;
-            font-size: 2rem;
-            margin-bottom: 18px;
+        .main-layout {
+            display: flex;
+            gap: 30px;
         }
-        .blocked-message p {
-            color: #444;
-            font-size: 1.1rem;
+        .sidebar {
+            width: 260px;
+            min-width: 180px;
+            max-width: 320px;
+            flex-shrink: 0;
         }
-        @media (max-width: 600px) {
-            .blocked-message {
-                padding: 20px 10px;
-                font-size: 1rem;
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
             }
-            .blocked-message h1 {
-                font-size: 1.3rem;
+            .sidebar {
+                width: 100%;
+                max-width: none;
+                margin-bottom: 20px;
             }
         }
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; }
         header {
             padding: 20px 0;
             border-bottom: 1px solid var(--border-color);
@@ -82,7 +83,9 @@
             overflow-x: auto;
             transition: background-color 0.3s, border-color 0.3s;
         }
-        .search-container { width: 100%; margin-bottom: 30px; }
+        .block { margin-bottom: 30px; }
+        .sidebar .content-card { margin-bottom: 0; }
+        .search-container { width: 100%; margin-bottom: 0; }
         .search-box {
             width: 100%; padding: 12px 20px; font-size: 1rem;
             border: 2px solid var(--search-border);
@@ -127,8 +130,31 @@
             font-size: 0.8rem;
             text-decoration: none;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
         .download-btn:hover { background-color: #004c99; }
+        .category-btn {
+            width: 100%;
+            text-align: left;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            border: none;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .category-btn:hover, .category-btn.active {
+            background-color: #004c99;
+        }
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-width: 350px;
+        }
         .no-results { text-align: center; padding: 20px; color: var(--secondary-color); font-style: italic; display: none; }
         .category-section { display: block; }
         .footer {
@@ -146,7 +172,6 @@
             align-items: center;
             gap: 15px;
         }
-        /* Удалено .github-support, .github-logo, .github-link стили */
         a {
             color: var(--primary-color);
             text-decoration: none;
@@ -230,27 +255,97 @@
             font-size: 0.92rem;
             color: var(--secondary-color);
         }
-        @media (max-width: 768px) {
-            .container { padding: 15px; }
-            .content-card { padding: 15px; }
-            .apps-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-            .back-to-top { width: 40px; height: 40px; font-size: 16px; bottom: 20px; right: 20px; }
-            header { flex-direction: column; align-items: center; }
-            .theme-toggle { margin: 10px 0 0 0; }
-            .news-author-block { gap: 8px; }
-            .news-author-avatar { width: 28px; height: 28px; }
+        /* CAPTCHA styles */
+        .captcha-modal-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.35);
+            z-index: 3002;
+            display: none;
+        }
+        .captcha-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+            padding: 32px 28px 24px;
+            z-index: 3003;
+            min-width: 280px;
+            max-width: 95vw;
+            display: none;
+        }
+        .captcha-modal h3 {
+            font-size: 1.1rem;
+            color: #c00;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .captcha-modal label {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+            text-align: center;
+        }
+        .captcha-modal input[type="text"] {
+            width: 100px;
+            font-size: 1.15rem;
+            padding: 8px 10px;
+            border: 2px solid #ccc;
+            border-radius: 7px;
+            margin: 0 auto 18px auto;
+            display: block;
+            text-align: center;
+        }
+        .captcha-modal .captcha-image {
+            display: block;
+            margin: 0 auto 22px auto;
+            font-size: 2.2rem;
+            letter-spacing: 6px;
+            font-family: monospace;
+            color: #0066cc;
+            background: #f3f7fa;
+            border-radius: 6px;
+            padding: 10px 24px;
+            user-select: none;
+        }
+        .captcha-modal .captcha-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 8px 24px;
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .captcha-modal .captcha-btn:hover {
+            background: #004c99;
+        }
+        .captcha-modal .captcha-close {
+            position: absolute;
+            top: 10px; right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #888;
+            cursor: pointer;
+        }
+        .captcha-modal .captcha-error {
+            color: #c00;
+            font-size: 0.98rem;
+            margin: 4px auto 0 auto;
+            text-align: center;
+            display: block;
         }
         @media (max-width: 480px) {
-            .container { padding: 10px; }
-            h1 { font-size: 1.8rem; }
-            h2 { font-size: 1.3rem; }
-            h3 { font-size: 1.1rem; }
-            .content-card { padding: 12px; border-radius: 6px; }
-            .apps-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-            /* Удалено .github-support, .github-logo, .github-link стили */
-            .search-box { padding: 10px 15px; font-size: 0.9rem; }
-            .news-author-block { gap: 6px; }
-            .news-author-avatar { width: 23px; height: 23px; }
+            .captcha-modal { padding: 18px 8px 16px; min-width: 0; }
+            .captcha-modal .captcha-image { font-size: 1.6rem; padding: 7px 10px; }
         }
     </style>
 </head>
@@ -260,12 +355,34 @@
             <h1>Repository Windows Zone Club</h1>
             <button class="theme-toggle" aria-label="Переключить тему">🌓</button>
         </header>
-        <main>
-            <div class="content-card">
-                <div style="margin-bottom:20px;">
-                    <label for="categorySelect" style="margin-right:10px;">Выберите категорию:</label>
-                    <select id="categorySelect">
-                        <option value="all">Все категории</option>
+        <div class="main-layout">
+            <!-- Сайдбар с категориями -->
+            <aside class="sidebar">
+                <div class="content-card block" id="categoryBlock">
+                    <h2 style="margin-top:0;">Категории приложений</h2>
+                    <ul class="category-list">
+                        <li>
+                            <button class="category-btn active" id="catAll" onclick="setCategory('all', this)">Все категории</button>
+                        </li>
+                        <li>
+                            <button class="category-btn" id="catBrowsers" onclick="setCategory('browsers', this)">Браузеры</button>
+                        </li>
+                        <li>
+                            <button class="category-btn" id="catMessengers" onclick="setCategory('messengers', this)">Мессенджеры</button>
+                        </li>
+                        <li>
+                            <button class="category-btn" id="catMultimedia" onclick="setCategory('multimedia', this)">Мультимедиа</button>
+                        </li>
+                        <li>
+                            <button class="category-btn" id="catUtilities" onclick="setCategory('utilities', this)">Другое</button>
+                        </li>
+                        <li>
+                            <button class="category-btn" id="catWindows" onclick="setCategory('windows', this)">Оригинальные Windows</button>
+                        </li>
+                    </ul>
+                    <!-- Скрытый select для совместимости со скриптом поиска -->
+                    <select id="categorySelect" style="display:none;">
+                        <option value="all" selected>Все категории</option>
                         <option value="browsers">Браузеры</option>
                         <option value="messengers">Мессенджеры</option>
                         <option value="multimedia">Мультимедиа</option>
@@ -273,14 +390,22 @@
                         <option value="windows">Оригинальные Windows</option>
                     </select>
                 </div>
-                <div class="search-container">
-                    <input type="text" id="searchInput" class="search-box" placeholder="Поиск приложений..." autocomplete="off">
-                    <div class="search-results" id="searchResults"></div>
+            </aside>
+            <!-- Основная часть: поиск и приложения -->
+            <div class="main-content">
+                <!-- Поиск Блок -->
+                <div class="content-card block" id="searchBlock">
+                    <h2>Поиск приложений</h2>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-box" placeholder="Поиск приложений..." autocomplete="off">
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                    <div class="no-results" id="noResults">
+                        Приложений по вашему запросу не найдено
+                    </div>
                 </div>
-                <div class="no-results" id="noResults">
-                    Приложений по вашему запросу не найдено
-                </div>
-                <div id="appsContainer">
+                <!-- Приложения Блок -->
+                <div class="content-card" id="appsBlock">
                     <h2>Доступные приложения</h2>
                     <div class="category-section" id="browsersSection">
                         <h3>Браузеры</h3>
@@ -288,22 +413,22 @@
                             <div class="app-card" data-name="firefox" data-category="browsers">
                                 <div class="app-icon">🌐</div>
                                 <div class="app-name">Firefox</div>
-                                <a href="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w" class="download-btn captcha-link" data-link="https://mega.nz/file/FXFmUT6R#Zjv_lYTWMhOAr6z49AtgJq2mvtwyOx8E_zCGE7mKi-w">Скачать</a>
                             </div>
                             <div class="app-card" data-name="vivaldi" data-category="browsers">
                                 <div class="app-icon">🌐</div>
                                 <div class="app-name">Vivaldi</div>
-                                <a href="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU" class="download-btn captcha-link" data-link="https://mega.nz/file/BONRjTLC#lfbRhH2iiuRcJ7-xQVCp2FqpM1mC5qVYjHO38L1AkQU">Скачать</a>
                             </div>
                             <div class="app-card" data-name="brave" data-category="browsers">
                                 <div class="app-icon">🌐</div>
                                 <div class="app-name">Brave</div>
-                                <a href="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk" class="download-btn captcha-link" data-link="https://mega.nz/file/NK9QVAJL#XeVaptcrbr9TKrSX1X0OPEdOSSJMbLaceUAv67Z47sk">Скачать</a>
                             </div>
                             <div class="app-card" data-name="google chrome" data-category="browsers">
                                 <div class="app-icon">🌐</div>
                                 <div class="app-name">Google Chrome</div>
-                                <a href="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww" class="download-btn captcha-link" data-link="https://mega.nz/file/YHEj2KSb#p398sE5QmyBd_krfY6naiOHWf7k09PLWCKIX6mNL2ww">Скачать</a>
                             </div>
                         </div>
                     </div>
@@ -313,17 +438,17 @@
                             <div class="app-card" data-name="telegram" data-category="messengers">
                                 <div class="app-icon">✉️</div>
                                 <div class="app-name">Telegram</div>
-                                <a href="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os" class="download-btn captcha-link" data-link="https://mega.nz/file/0HUlnCza#1bnbCixHR3v4AF9m_9gBv-DGiBIy9uRIE_uyiIet-Os">Скачать</a>
                             </div>
                             <div class="app-card" data-name="discord" data-category="messengers">
                                 <div class="app-icon">💬</div>
                                 <div class="app-name">Discord</div>
-                                <a href="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM" class="download-btn captcha-link" data-link="https://mega.nz/file/0O8E2bRA#hIAm-f5KTdCu8KKZsWx_T2iZQqYLoTAaC-EOnrw__oM">Скачать</a>
                             </div>
                             <div class="app-card" data-name="viber" data-category="messengers">
                                 <div class="app-icon">📱</div>
                                 <div class="app-name">Viber</div>
-                                <a href="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0" class="download-btn captcha-link" data-link="https://mega.nz/file/sDsjlZiA#TbvN-zi7PFIz2HOZ-rJoRlblKHpm8QCkbcPZAxaCZy0">Скачать</a>
                             </div>
                         </div>
                     </div>
@@ -333,12 +458,12 @@
                             <div class="app-card" data-name="vlc" data-category="multimedia">
                                 <div class="app-icon">🎬</div>
                                 <div class="app-name">VLC</div>
-                                <a href="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU" class="download-btn captcha-link" data-link="https://mega.nz/file/MOcmCDQS#y5sMC3so34jBEUqUmApakyzC59vlKDnjgP_aYkti1GU">Скачать</a>
                             </div>
                             <div class="app-card" data-name="aimp" data-category="multimedia">
                                 <div class="app-icon">🎵</div>
                                 <div class="app-name">AIMP</div>
-                                <a href="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c" class="download-btn captcha-link" data-link="https://mega.nz/file/tPEgyS4I#lEXlWJjrW49q6yycb4JFcPS93-Tn06vGNWX7zEBvW9c">Скачать</a>
                             </div>
                         </div>
                     </div>
@@ -348,32 +473,32 @@
                             <div class="app-card" data-name="stdu viewer" data-category="utilities">
                                 <div class="app-icon">📖</div>
                                 <div class="app-name">STDU Viewer</div>
-                                <a href="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs" class="download-btn captcha-link" data-link="https://mega.nz/file/hekTiYqA#esq2MKUZsZIPk3HUsXYpm21ptLxT7BvcTPkgfD3cUXs">Скачать</a>
                             </div>
                             <div class="app-card" data-name="qbittorrent" data-category="utilities">
                                 <div class="app-icon">📥</div>
                                 <div class="app-name">qBittorrent</div>
-                                <a href="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I" class="download-btn captcha-link" data-link="https://mega.nz/file/lCN2VKSK#RKhQTp4RJ1wu9X2w6kD6tQkDM246I7sRecgXFb2rF7I">Скачать</a>
                             </div>
                             <div class="app-card" data-name="windscribe" data-category="utilities">
                                 <div class="app-icon">🔒</div>
                                 <div class="app-name">Windscribe</div>
-                                <a href="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18" class="download-btn captcha-link" data-link="https://mega.nz/file/tbViRawb#R4_A-jGkMKtTkWxxr-NolXoXvXMYKX1X1PgLxnQ1c18">Скачать</a>
                             </div>
                             <div class="app-card" data-name="steam" data-category="utilities">
                                 <div class="app-icon">🎮</div>
                                 <div class="app-name">Steam</div>
-                                <a href="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4" class="download-btn captcha-link" data-link="https://mega.nz/file/pbEg0CRD#jGNxiRkropTDtx0wDog5A1P9jNbzrl2SzlQbwlTatq4">Скачать</a>
                             </div>
                             <div class="app-card" data-name="winrar" data-category="utilities">
                                 <div class="app-icon">🗜️</div>
                                 <div class="app-name">WinRAR</div>
-                                <a href="https://mega.nz/file/UP8mVYQC#BfeRCDM4riSQ5os8LnLWf4Y2wTXWqQg9nQXAidmfPlE" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/UP8mVYQC#BfeRCDM4riSQ5os8LnLWf4Y2wTXWqQg9nQXAidmfPlE" class="download-btn captcha-link" data-link="https://mega.nz/file/UP8mVYQC#BfeRCDM4riSQ5os8LnLWf4Y2wTXWqQg9nQXAidmfPlE">Скачать</a>
                             </div>
                             <div class="app-card" data-name="7-zip" data-category="utilities">
                                 <div class="app-icon">🗜️</div>
                                 <div class="app-name">7-Zip</div>
-                                <a href="https://mega.nz/file/YLsjBALR#WYUMlTkLRWA3TLXza30gJemoMANYL3KPPIwtnwowplY" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/YLsjBALR#WYUMlTkLRWA3TLXza30gJemoMANYL3KPPIwtnwowplY" class="download-btn captcha-link" data-link="https://mega.nz/file/YLsjBALR#WYUMlTkLRWA3TLXza30gJemoMANYL3KPPIwtnwowplY">Скачать</a>
                             </div>
                         </div>
                     </div>
@@ -383,29 +508,40 @@
                             <div class="app-card" data-name="windows 7" data-category="windows">
                                 <div class="app-icon">🖥️</div>
                                 <div class="app-name">Windows 7 x64 Rus (Original MSDN)</div>
-                                <a href="https://mega.nz/file/YXEEkCyQ#4yI711qv5_IEH5eXqDdeC7WWIY8CGS99Zjxe8wuRF9Q" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/YXEEkCyQ#4yI711qv5_IEH5eXqDdeC7WWIY8CGS99Zjxe8wuRF9Q" class="download-btn captcha-link" data-link="https://mega.nz/file/YXEEkCyQ#4yI711qv5_IEH5eXqDdeC7WWIY8CGS99Zjxe8wuRF9Q">Скачать</a>
                             </div>
                             <div class="app-card" data-name="windows 10" data-category="windows">
                                 <div class="app-icon">🖥️</div>
                                 <div class="app-name">Windows 10 x64 Rus (Original MSDN)</div>
-                                <a href="https://mega.nz/file/hP913Kwb#OuTSvk0c_P8nH6eVXbcGjORploQKpPzjzYdmF7BZH1o" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/hP913Kwb#OuTSvk0c_P8nH6eVXbcGjORploQKpPzjzYdmF7BZH1o" class="download-btn captcha-link" data-link="https://mega.nz/file/hP913Kwb#OuTSvk0c_P8nH6eVXbcGjORploQKpPzjzYdmF7BZH1o">Скачать</a>
                             </div>
                             <div class="app-card" data-name="windows 11" data-category="windows">
                                 <div class="app-icon">🖥️</div>
                                 <div class="app-name">Windows 11 x64 Rus (Original MSDN)</div>
-                                <a href="https://mega.nz/file/1XkiTZrR#ZSfM3FHMiLrGk9hFGmQ-5rQJh0vh17bgJa5snBQh6CI" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/1XkiTZrR#ZSfM3FHMiLrGk9hFGmQ-5rQJh0vh17bgJa5snBQh6CI" class="download-btn captcha-link" data-link="https://mega.nz/file/1XkiTZrR#ZSfM3FHMiLrGk9hFGmQ-5rQJh0vh17bgJa5snBQh6CI">Скачать</a>
                             </div>
                             <div class="app-card" data-name="windows 8.1" data-category="windows">
                                 <div class="app-icon">🖥️</div>
                                 <div class="app-name">Windows 8.1 x64 Rus (Original MSDN)</div>
-                                <a href="https://mega.nz/file/IKF3mJxR#YSuYIE6Qbj9L84Z2Vm6msgy7FZH78Gjr8xEVSqIwutM" class="download-btn" target="_blank">Скачать</a>
+                                <a href="https://mega.nz/file/IKF3mJxR#YSuYIE6Qbj9L84Z2Vm6msgy7FZH78Gjr8xEVSqIwutM" class="download-btn captcha-link" data-link="https://mega.nz/file/IKF3mJxR#YSuYIE6Qbj9L84Z2Vm6msgy7FZH78Gjr8xEVSqIwutM">Скачать</a>
                             </div>
                         </div>
                         <p style="margin-top:15px; color:#888; font-size:0.95em;">Оригинальные ISO-образы Windows с сайта MSDN. Для активации используйте лицензионный ключ или KMS.</p>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+    </div>
+    <!-- CAPTCHA MODAL -->
+    <div class="captcha-modal-bg" id="captchaModalBg"></div>
+    <div class="captcha-modal" id="captchaModal">
+        <button class="captcha-close" id="captchaCloseBtn" title="Закрыть">&times;</button>
+        <h3 id="captchaTitle">Подтвердите, что вы не робот</h3>
+        <label for="captchaInput" id="captchaLabel">Введите код с картинки:</label>
+        <div class="captcha-image" id="captchaImage">AB123</div>
+        <input type="text" id="captchaInput" maxlength="6" autocomplete="off" placeholder="Код">
+        <span class="captcha-error" id="captchaError" style="display:none;"></span>
+        <button class="captcha-btn" id="captchaSubmitBtn">Подтвердить</button>
     </div>
     <section class="content-card" style="max-width: 1200px; margin: 0 auto 30px;">
         <h2>Новости клуба</h2>
@@ -428,7 +564,6 @@
     <footer class="footer">
         <div class="footer-content">
             <p>Для получения дополнительной информации посетите <a href="https://t.me/WinZoneClub_Official" target="_blank" rel="noopener noreferrer">официальный телеграм-канал</a>.</p>
-            <p>© Nexus Software 2025</p>
         </div>
     </footer>
     <button class="back-to-top" title="Наверх">↑</button>
@@ -471,6 +606,7 @@
                 localStorage.removeItem('theme');
             }
             updateThemeIcon();
+            applyCaptchaTheme();
         });
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
             if (!localStorage.getItem('theme')) {
@@ -480,8 +616,18 @@
                     body.classList.remove('dark-theme');
                 }
                 updateThemeIcon();
+                applyCaptchaTheme();
             }
         });
+
+        // Выбор категории через список кнопок
+        function setCategory(category, btn) {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const categorySelect = document.getElementById('categorySelect');
+            categorySelect.value = category;
+            categorySelect.dispatchEvent(new Event('change'));
+        }
 
         // Поиск и выбор категории
         document.addEventListener('DOMContentLoaded', function() {
@@ -491,10 +637,19 @@
             const appCards = document.querySelectorAll('.app-card');
             const categorySections = document.querySelectorAll('.category-section');
             const categorySelect = document.getElementById('categorySelect');
-            // Фильтрация по категории
             categorySelect.addEventListener('change', function() {
                 const selectedCategory = this.value;
-                // Сброс поиска при смене категории
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (
+                        (selectedCategory === 'all' && btn.id === 'catAll') ||
+                        (selectedCategory === 'browsers' && btn.id === 'catBrowsers') ||
+                        (selectedCategory === 'messengers' && btn.id === 'catMessengers') ||
+                        (selectedCategory === 'multimedia' && btn.id === 'catMultimedia') ||
+                        (selectedCategory === 'utilities' && btn.id === 'catUtilities') ||
+                        (selectedCategory === 'windows' && btn.id === 'catWindows')
+                    ) btn.classList.add('active');
+                });
                 searchInput.value = '';
                 searchResults.textContent = '';
                 noResults.style.display = 'none';
@@ -510,14 +665,12 @@
                     });
                 }
             });
-            // Поиск приложений
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase().trim();
                 let foundApps = 0;
                 if (searchTerm.length === 0) {
                     appCards.forEach(card => { card.style.display = ''; card.parentElement.style.display = ''; });
                     categorySections.forEach(section => {
-                        // Показываем только выбранную категорию
                         if (categorySelect.value === 'all' || section.id === categorySelect.value + 'Section') {
                             section.style.display = 'block';
                         } else {
@@ -534,7 +687,6 @@
                     const appName = card.getAttribute('data-name').toLowerCase();
                     const displayName = card.querySelector('.app-name').textContent.toLowerCase();
                     const cardCategory = card.getAttribute('data-category');
-                    // Показывать только если совпадает категория или выбрана "all"
                     if (
                         (categorySelect.value === 'all' || cardCategory === categorySelect.value) &&
                         (appName.includes(searchTerm) || displayName.includes(searchTerm))
@@ -556,6 +708,85 @@
             });
             searchInput.focus();
         });
+
+        // --- CAPTCHA LOGIC ---
+        function generateCaptchaText() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let text = "";
+            for (let i = 0; i < 5; i++) {
+                text += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return text;
+        }
+        let currentCaptchaText = "";
+        let currentCaptchaLink = "";
+
+        function applyCaptchaTheme() {
+            const captchaModal = document.getElementById('captchaModal');
+            const captchaBg = document.getElementById('captchaModalBg');
+            const body = document.body;
+            if (body.classList.contains('dark-theme')) {
+                captchaModal.style.background = "#181b1f";
+                captchaModal.style.color = "#e0e0e0";
+                document.getElementById('captchaImage').style.background = "#222";
+                document.getElementById('captchaImage').style.color = "#4a9eff";
+                document.getElementById('captchaTitle').style.color = "#ff5656";
+                document.getElementById('captchaLabel').style.color = "#bbb";
+                captchaBg.style.background = "rgba(10,16,32,0.6)";
+            } else {
+                captchaModal.style.background = "#fff";
+                captchaModal.style.color = "#333";
+                document.getElementById('captchaImage').style.background = "#f3f7fa";
+                document.getElementById('captchaImage').style.color = "#0066cc";
+                document.getElementById('captchaTitle').style.color = "#c00";
+                document.getElementById('captchaLabel').style.color = "#333";
+                captchaBg.style.background = "rgba(0,0,0,0.35)";
+            }
+        }
+
+        function showCaptcha(link) {
+            currentCaptchaText = generateCaptchaText();
+            currentCaptchaLink = link;
+            document.getElementById('captchaImage').textContent = currentCaptchaText;
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('captchaError').style.display = 'none';
+            document.getElementById('captchaModalBg').style.display = 'block';
+            document.getElementById('captchaModal').style.display = 'block';
+            applyCaptchaTheme();
+            document.getElementById('captchaInput').focus();
+        }
+        function hideCaptcha() {
+            document.getElementById('captchaModalBg').style.display = 'none';
+            document.getElementById('captchaModal').style.display = 'none';
+        }
+        document.getElementById('captchaCloseBtn').onclick = hideCaptcha;
+        document.getElementById('captchaModalBg').onclick = hideCaptcha;
+
+        document.getElementById('captchaSubmitBtn').onclick = function() {
+            const val = document.getElementById('captchaInput').value.trim().toUpperCase();
+            if (val === currentCaptchaText) {
+                hideCaptcha();
+                window.open(currentCaptchaLink, '_blank');
+            } else {
+                document.getElementById('captchaError').textContent = 'Код введён неверно!';
+                document.getElementById('captchaError').style.display = 'block';
+                document.getElementById('captchaInput').focus();
+            }
+        };
+
+        // Перехват нажатий на кнопки "Скачать"
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.captcha-link').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showCaptcha(this.getAttribute('data-link'));
+                });
+            });
+        });
+
+        // Синхронизация темы для капчи при переключении темы и авто-смене темы браузера
+        themeToggle.addEventListener('click', applyCaptchaTheme);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyCaptchaTheme);
     </script>
 </body>
 </html>
